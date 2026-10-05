@@ -1,0 +1,35 @@
+{
+  "stages": {
+    "implementation": {
+      "type": "sequential",
+      "agents": ["feature-builder", "test-runner"]
+    },
+    "review-loop": {
+      "type": "loop",
+      "agents": ["code-review", "feature-builder"],
+      "iterations": 3
+    },
+    "static-loop": {
+      "type": "loop",
+      "agents": ["static-analysis", "feature-builder"],
+      "iterations": 3
+    },
+    "test-rerun": {
+      "type": "sequential",
+      "agents": ["test-runner"]
+    },
+    "architecture-review": {
+      "type": "sequential",
+      "agents": ["agentic-review"]
+    },
+    "pr-author": {
+      "type": "sequential",
+      "agents": ["pr-author"]
+    }
+  },
+  "workflows": {
+    "full": ["implementation", "review-loop", "static-loop", "test-rerun", "architecture-review", "pr-author"],
+    "quick": ["implementation", "pr-author"]
+  },
+  "defaultWorkflow": "full"
+}

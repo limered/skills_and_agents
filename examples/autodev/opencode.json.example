@@ -1,0 +1,30 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "feature-builder",
+  "agent": {
+    "feature-builder": {
+      "mode": "primary"
+    },
+    "pr-author": {
+      "mode": "primary"
+    },
+    "test-runner": {
+      "mode": "primary"
+    },
+    "static-analysis": {
+      "mode": "primary"
+    },
+    "code-review": {
+      "mode": "primary"
+    },
+    "agentic-review": {
+      "mode": "primary"
+    }
+  },
+  "permission": {
+    "bash": "allow",
+    "edit": "allow",
+    "external_directory": "allow"
+  },
+  "lsp": true
+}
