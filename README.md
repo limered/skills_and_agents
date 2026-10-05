@@ -4,16 +4,18 @@ My reusable OpenCode collection. Repo root mirrors a project `.opencode/` exactl
 
 ## Layout
 
-- `.opencode/skills/<name>/SKILL.md` — 16 skills (autodev versions win on overlap)
+- `.opencode/skills/<name>/SKILL.md` — 17 skills (autodev versions win on overlap)
 - `.opencode/agents/*.md` — 7 agents (6 autodev generic templates + 1 generic coding-mentor)
 - `examples/autodev/` — reference copies: `agents.json`, `AGENTS.md.example`, `opencode.json.example`, `static-analysis-policy.md`
 - `install.sh` / `install.ps1` — per-entry symlink farm into OpenCode discovery paths
 
-## Skills (16)
+## Skills (17)
 
 From autodev (7): `atomic-commit`, `batch-review-findings`, `code-review`, `codebase-design`, `implement`, `improve-codebase-architecture`, `tdd`
 
 Imported (9): `domain-modeling`, `grill-me`, `grill-with-docs`, `prototype`, `research`, `retro`, `to-spec`, `to-tickets`, `wayfinder`
+
+Built here (1): `setup-agents` — bind agent placeholders per install, prune unused agents
 
 Excluded: `setup-matt-pocock-skills`, symlinked `diagnose-crash`/`omarchy`.
 
@@ -42,5 +44,7 @@ Windows:
 ```
 
 Symlinks per entry, so `git pull` + re-run picks up new skills. Windows falls back to copy when symlinks lack privilege.
+
+After installing, bind the generic agent templates with `/setup-agents`: pick agents, fill placeholders, drop the rest. Answers persist in `<target>/agents.setup.json`.
 
 Autodev wiring is deferred (autodev has open issues); intended path is submodule or provision-time clone+copy of `.opencode/skills|agents`.

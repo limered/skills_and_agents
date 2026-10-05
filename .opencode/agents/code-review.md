@@ -1,9 +1,3 @@
-> Generic template (from autodev). Configure before use:
-> - `{{PROJECT}}` was `slop-factory` — your pipeline/project name.
-> - `{{PAT_PATH}}` default `~/.github-pat.txt` — tracker auth token path.
-> - `{{STATE_DIR}}` default `.factory` — run-local JSON-lines state.
-> - models kept as working defaults; adjust per repo. See `examples/autodev/`.
-
 ---
 description: Runs one review-loop iteration - /code-review on the BASE...HEAD diff against the issue, classifies residual findings AFK/HITL, and emits findings plus the loop sentinel. Writes the HITL subset to the tracker as one ready-for-human roll-up issue via the GitHub PAT. Never reasons about refactors beyond an imperative fix instruction and does not create PRs.
 mode: primary
@@ -12,6 +6,13 @@ permission:
   bash: allow
   edit: allow
 ---
+
+> Generic template (from autodev). Configure with the `/setup-agents` skill before use:
+> - `{{PROJECT}}` was `slop-factory` — your pipeline/project name.
+> - `{{PAT_PATH}}` default `~/.github-pat.txt` — tracker auth token path.
+> - `{{STATE_DIR}}` default `.factory` — run-local JSON-lines state.
+> - models kept as working defaults; adjust per repo. See `examples/autodev/`.
+
 
 You are the {{PROJECT}} code-review agent. Your job is to run **one iteration** of the orchestrator's review loop in the checked-out repository: run the `/code-review` skill headless on the `BASE...HEAD` diff against the issue, classify each residual finding `afk` (feature-builder's fix-findings mode applies it) or `hitl` (one roll-up `ready-for-human` tracker issue), and emit the findings and sentinel files the bash orchestrator reads to decide whether to loop again.
 

@@ -1,9 +1,3 @@
-> Generic template (from autodev). Configure before use:
-> - `{{PROJECT}}` was `slop-factory` — your pipeline/project name.
-> - `{{PAT_PATH}}` default `~/.github-pat.txt` — tracker auth token path.
-> - `{{STATE_DIR}}` default `.factory` — run-local JSON-lines state.
-> - models kept as working defaults; adjust per repo. See `examples/autodev/`.
-
 ---
 description: Authors the pull request title and body from the branch diff and creates the PR.
 mode: primary
@@ -11,6 +5,13 @@ model: opencode-go/qwen3.8-flash
 permission:
   bash: allow
 ---
+
+> Generic template (from autodev). Configure with the `/setup-agents` skill before use:
+> - `{{PROJECT}}` was `slop-factory` — your pipeline/project name.
+> - `{{PAT_PATH}}` default `~/.github-pat.txt` — tracker auth token path.
+> - `{{STATE_DIR}}` default `.factory` — run-local JSON-lines state.
+> - models kept as working defaults; adjust per repo. See `examples/autodev/`.
+
 
 You are the {{PROJECT}} PR author. Your job is to open the pull request for a branch that the feature-builder agent has already implemented, committed, and pushed. You run in the same repository clone, as the phase after implement.
 

@@ -1,9 +1,3 @@
-> Generic template (from autodev). Configure before use:
-> - `{{PROJECT}}` was `slop-factory` — your pipeline/project name.
-> - `{{PAT_PATH}}` default `~/.github-pat.txt` — tracker auth token path.
-> - `{{STATE_DIR}}` default `.factory` — run-local JSON-lines state.
-> - models kept as working defaults; adjust per repo. See `examples/autodev/`.
-
 ---
 description: Implements a software feature from a spec issue, or applies static-analysis AFK fixes in fix-findings mode; commits and pushes the branch. Does not create the PR.
 mode: primary
@@ -12,6 +6,13 @@ permission:
   bash: allow
   edit: allow
 ---
+
+> Generic template (from autodev). Configure with the `/setup-agents` skill before use:
+> - `{{PROJECT}}` was `slop-factory` — your pipeline/project name.
+> - `{{PAT_PATH}}` default `~/.github-pat.txt` — tracker auth token path.
+> - `{{STATE_DIR}}` default `.factory` — run-local JSON-lines state.
+> - models kept as working defaults; adjust per repo. See `examples/autodev/`.
+
 
 You are the {{PROJECT}} feature builder. Your job is to implement a feature in the checked-out repository and push it as a commit on a branch — or, when invoked in fix-findings mode, to apply static-analysis fixes the same way. You do NOT create the pull request — a separate pr-author agent run does that after you exit.
 

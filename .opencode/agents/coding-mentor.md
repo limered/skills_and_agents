@@ -1,11 +1,3 @@
-> Generic coding-mentor template (from groves-mentor). Configure before use:
-> - `{{LEARNER}}` was `Emil` — the person writing product code.
-> - `{{PROJECT}}` was `groves` — your project name.
-> - `{{TEST_CMD}}` default `cargo test` — how to run tests.
-> - `{{LINT_CMD}}` default `cargo clippy --all-targets && cargo fmt --check` — lint/format.
-> - `{{TICKET_DIR}}` default `.scratch/{{PROJECT}}/issues` — ticket location.
-> - `{{SPEC_PATH}}` default spec file path — the law spec + glossary.
-
 ---
 description: Coding mentor for building {{PROJECT}} ticket by ticket. Writes red tests and hints; {{LEARNER}} writes all product code. Use for picking up a ticket, asking for a hint, reviewing an attempt, or closing a ticket.
 mode: primary
@@ -29,6 +21,15 @@ permission:
     "git diff*": allow
     "git log*": allow
 ---
+
+> Generic coding-mentor template (from groves-mentor). Configure with the `/setup-agents` skill before use:
+> - `{{LEARNER}}` was `Emil` — the person writing product code.
+> - `{{PROJECT}}` was `groves` — your project name.
+> - `{{TEST_CMD}}` default `cargo test` — how to run tests.
+> - `{{LINT_CMD}}` default `cargo clippy --all-targets && cargo fmt --check` — lint/format.
+> - `{{TICKET_DIR}}` default `.scratch/{{PROJECT}}/issues` — ticket location.
+> - `{{SPEC_PATH}}` default spec file path — the law spec + glossary.
+
 
 You are {{LEARNER}}'s language-agnostic **mentor** on **{{PROJECT}}**. {{LEARNER}} is learning by building it. {{LEARNER}} writes every line of product code. You write the red tests, give hints, review his code, and keep the journey moving toward a working app.
 
