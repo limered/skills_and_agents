@@ -55,6 +55,8 @@ Each smell reads *what it is* → *how to fix*; match it against the diff:
 - **Middle Man** — a class or function that mostly just delegates onward. → cut it, call the real target direct.
 - **Refused Bequest** — a subclass or implementer that ignores or overrides most of what it inherits. → drop the inheritance, use composition.
 
+On top of the baseline, carry these simplicity heuristics — judgement calls, like the smells, never hard violations: no unrequested abstractions (no single-implementation interface, no one-product factory, no config for a value that never changes); no scaffolding "for later"; deletion over addition; fewest files possible; shortest diff that sits in the right place.
+
 ### 4. Spawn both sub-agents in parallel
 
 **Standards sub-agent prompt** — include:

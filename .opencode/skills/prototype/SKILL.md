@@ -5,7 +5,7 @@ description: Build a throwaway prototype to answer a design question. Use when t
 
 # Prototype
 
-A prototype is **throwaway code that answers a question**. The question decides the shape.
+A prototype is **throwaway code that answers a question**. The question decides the shape. Build the thinnest thing that answers it: nothing reusable, nothing beyond the question.
 
 ## Pick a branch
 
