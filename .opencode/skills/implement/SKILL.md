@@ -16,6 +16,8 @@ Use /tdd where possible, at pre-agreed seams — scoped to the smallest checks t
 
 Run typechecking regularly, single test files regularly, and the full test suite once at the end. If the caller says a separate phase runs the tests (or otherwise asks to skip the full run), skip the full test-suite run at the end.
 
-Once done, use /code-review to review the work.
+Implement through subagents: split the work by ticket or seam and run one subagent per independent unit, in parallel where possible; integrate their results on the current branch.
+
+Once done, use /code-review to review the work — it spins its own parallel subagents per axis.
 
 Commit your work to the current branch.
