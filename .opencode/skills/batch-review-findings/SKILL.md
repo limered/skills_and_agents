@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Batch Review Findings
 
-Turn the pile of open `agentic-review` issues into a small set of **work batches**. Each batch is a cluster of deduped findings the user can then grill (via `/grill-me` or `/grilling`) into real `ready-for-agent` issues.
+Turn the pile of open `agentic-review` issues into a small set of **work batches**. Each batch is a cluster of deduped findings the user can then grill (via `/grill-me`) into real `ready-for-agent` issues.
 
 Agentic-review issues are advisory dumps: one issue per factory job, each containing several **finding cards** (`Candidate N —` from `improve-codebase-architecture`). (Standards + Spec code-review findings no longer land here — they loop through the `code-review` agent's fix passes in-run, and only their HITL remainder is filed as a `code-review roll-up` issue.) The same problem recurs across jobs, and related problems scatter across issues. This skill collapses that noise.
 

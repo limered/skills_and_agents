@@ -4,16 +4,16 @@ My reusable OpenCode collection. Repo root mirrors a project `.opencode/` exactl
 
 ## Layout
 
-- `.opencode/skills/<name>/SKILL.md` — 17 skills (autodev versions win on overlap)
+- `.opencode/skills/<name>/SKILL.md` — 16 skills (autodev versions win on overlap)
 - `.opencode/agents/*.md` — 7 agents (6 autodev generic templates + 1 generic coding-mentor)
 - `examples/autodev/` — reference copies: `agents.json`, `AGENTS.md.example`, `opencode.json.example`, `static-analysis-policy.md`
 - `install.sh` / `install.ps1` — per-entry symlink farm into OpenCode discovery paths
 
-## Skills (17)
+## Skills (16)
 
 From autodev (7): `atomic-commit`, `batch-review-findings`, `code-review`, `codebase-design`, `implement`, `improve-codebase-architecture`, `tdd`
 
-Imported (10): `domain-modeling`, `grill-me`, `grill-with-docs`, `grilling`, `prototype`, `research`, `retro`, `to-spec`, `to-tickets`, `wayfinder`
+Imported (9): `domain-modeling`, `grill-me`, `grill-with-docs`, `prototype`, `research`, `retro`, `to-spec`, `to-tickets`, `wayfinder`
 
 Excluded: `setup-matt-pocock-skills`, symlinked `diagnose-crash`/`omarchy`.
 
