@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 # Link skills/agents from this repo into OpenCode discovery paths.
 # Usage:
-#   ./install.sh [--global] [--project <path>] [--legacy] [--uninstall]
+#   ./install.sh [--global] [--project <path>] [--lang en|de] [--legacy] [--uninstall]
+#   --lang: en (default, .opencode/skills) or de (de/skills). Agents exist in English only.
 #   --legacy: skills into ~/.config/opencode/skills (project: .opencode/skills) instead of .agents/skills.
 # Targets: skills ~/.agents/skills, agents ~/.config/opencode/agents.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SRC_SKILLS="$REPO_ROOT/.opencode/skills"
 SRC_AGENTS="$REPO_ROOT/.opencode/agents"
 
 MODE="global"
 PROJECT_PATH=""
+SKILL_LANG="en"
 LEGACY=0
 UNINSTALL=0
 
@@ -19,12 +20,19 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --global) MODE="global"; shift ;;
     --project) PROJECT_PATH="${2:?--project needs a path}"; MODE="project"; shift 2 ;;
+    --lang) SKILL_LANG="${2:?--lang needs en|de}"; shift 2 ;;
     --legacy) LEGACY=1; shift ;;
     --uninstall) UNINSTALL=1; shift ;;
-    -h|--help) sed -n '2,6p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,7p' "$0"; exit 0 ;;
     *) echo "Unknown arg: $1 (see --help)" >&2; exit 1 ;;
   esac
 done
+
+case "$SKILL_LANG" in
+  en) SRC_SKILLS="$REPO_ROOT/.opencode/skills" ;;
+  de) SRC_SKILLS="$REPO_ROOT/de/skills" ;;
+  *) echo "Unknown --lang: $SKILL_LANG (en|de)" >&2; exit 1 ;;
+esac
 
 cfg="${XDG_CONFIG_HOME:-$HOME/.config}/opencode"
 if [[ "$MODE" == "global" ]]; then

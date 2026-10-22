@@ -1,22 +1,24 @@
 # Link skills/agents from this repo into OpenCode discovery paths.
 # Usage:
-#   .\install.ps1 [-Global] [-Project <path>] [-Legacy] [-Copy] [-Uninstall]
+#   .\install.ps1 [-Global] [-Project <path>] [-Lang en|de] [-Legacy] [-Copy] [-Uninstall]
+#   -Lang: en (default, .opencode/skills) or de (de/skills). Agents exist in English only.
 #   -Legacy: skills into ~/.config/opencode/skills (project: .opencode/skills) instead of .agents/skills.
 #   -Copy: copy files instead of symlinking; overwrites existing entries.
 # Targets: skills ~/.agents/skills, agents ~/.config/opencode/agents.
 param(
   [switch]$Global,
   [string]$Project = "",
+  [ValidateSet("en", "de")][string]$Lang = "en",
   [switch]$Legacy,
   [switch]$Copy,
   [switch]$Uninstall,
   [switch]$Help
 )
 
-if ($Help) { Get-Content $PSCommandPath | Select-Object -First 6; exit 0 }
+if ($Help) { Get-Content $PSCommandPath | Select-Object -First 7; exit 0 }
 
 $RepoRoot = Split-Path -Parent $PSCommandPath
-$SrcSkills = Join-Path $RepoRoot ".opencode\skills"
+$SrcSkills = if ($Lang -eq "de") { Join-Path $RepoRoot "de\skills" } else { Join-Path $RepoRoot ".opencode\skills" }
 $SrcAgents = Join-Path $RepoRoot ".opencode\agents"
 
 if ($Project -ne "") {
