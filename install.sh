@@ -53,7 +53,7 @@ if [[ $UNINSTALL -eq 1 ]]; then echo "uninstalling from $DST_SKILLS , $DST_AGENT
 for d in "$SRC_SKILLS"/*/; do
   [[ -d "$d" ]] || continue
   name="$(basename "$d")"
-  link_entry "$d" "$DST_SKILLS/$name"
+  link_entry "${d%/}" "$DST_SKILLS/$name"
 done
 
 for f in "$SRC_AGENTS"/*.md; do
