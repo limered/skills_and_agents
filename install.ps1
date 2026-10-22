@@ -1,15 +1,17 @@
 # Link skills/agents from this repo into OpenCode discovery paths.
 # Usage:
-#   .\install.ps1 [-Global] [-Project <path>] [-Uninstall]
+#   .\install.ps1 [-Global] [-Project <path>] [-Copy] [-Uninstall]
+#   -Copy: copy files instead of symlinking; overwrites existing entries.
 # Defaults to global: $env:APPDATA\opencode\skills|agents, else ~/.config/opencode on PS7.
 param(
   [switch]$Global,
   [string]$Project = "",
+  [switch]$Copy,
   [switch]$Uninstall,
   [switch]$Help
 )
 
-if ($Help) { Get-Content $PSCommandPath | Select-Object -First 6; exit 0 }
+if ($Help) { Get-Content $PSCommandPath | Select-Object -First 7; exit 0 }
 
 $RepoRoot = Split-Path -Parent $PSCommandPath
 $SrcSkills = Join-Path $RepoRoot ".opencode\skills"
@@ -27,12 +29,20 @@ if ($Project -ne "") {
 
 function Link-Entry($Src, $Dst) {
   if ($Uninstall) {
-    if ((Test-Path $Dst) -and ((Get-Item $Dst).LinkType -eq "SymbolicLink")) {
-      Remove-Item $Dst; Write-Output "removed $Dst"
+    if (Test-Path $Dst) {
+      if ((Get-Item $Dst).LinkType -eq "SymbolicLink") { Remove-Item $Dst }
+      else { Remove-Item -Recurse -Force $Dst }
+      Write-Output "removed $Dst"
     }
     return
   }
   New-Item -ItemType Directory -Force -Path (Split-Path -Parent $Dst) | Out-Null
+  if ($Copy) {
+    if (Test-Path $Dst) { Remove-Item -Recurse -Force $Dst }
+    Copy-Item -Recurse -Force $Src $Dst
+    Write-Output "copied $Src -> $Dst"
+    return
+  }
   if (Test-Path $Dst) {
     $item = Get-Item $Dst -ErrorAction SilentlyContinue
     if ($item.LinkType -eq "SymbolicLink" -and $item.Target -eq $Src) { Write-Output "ok $Dst"; return }
