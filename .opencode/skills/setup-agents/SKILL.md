@@ -12,7 +12,7 @@ Never edit the collection repo templates — only the installed copies. If the t
 ## 1. Locate the install
 
 - If `./.opencode/agents/` exists in the working directory, that is the target (project install).
-- Else the target is the global install (`~/.config/opencode/agents/`, or `%APPDATA%\opencode\agents` on Windows).
+- Else the target is the global install (`~/.config/opencode/agents/` on every OS, or `$XDG_CONFIG_HOME/opencode/agents/` when that is set).
 - If both exist or neither does, ask the user which target to set up.
 
 Read `<target>/agents.setup.json` if present: saved answers from a previous run. Only ask about what is new or changed; reuse the rest silently.
