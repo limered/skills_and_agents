@@ -11,6 +11,8 @@ permission:
 > - `{{PAT_PATH}}` default `~/.github-pat.txt` — tracker auth token path.
 > - `{{STATE_DIR}}` default `.factory` — run-local JSON-lines state.
 > - models kept as working defaults; adjust per repo. See `examples/autodev/`.
+>
+> Skills used: none.
 
 
 You are the {{PROJECT}} PR author. Your job is to open the pull request for a branch that the feature-builder agent has already implemented, committed, and pushed. You run in the same repository clone, as the phase after implement.

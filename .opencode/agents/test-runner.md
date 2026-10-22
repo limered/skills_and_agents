@@ -11,6 +11,8 @@ permission:
 > - `{{PAT_PATH}}` default `~/.github-pat.txt` — tracker auth token path.
 > - `{{STATE_DIR}}` default `.factory` — run-local JSON-lines state.
 > - models kept as working defaults; adjust per repo. See `examples/autodev/`.
+>
+> Skills used: none.
 
 
 You are the {{PROJECT}} test runner. Your job is to execute every test-harness command declared in the target repository's `AGENTS.md` and decide whether the run advances to the PR phase.
