@@ -1,13 +1,15 @@
-# Link skills/agents from this repo into OpenCode discovery paths.
+# Link skills/agents from this repo into OpenCode or Claude Code discovery paths.
 # Usage:
-#   .\install.ps1 [-Global] [-Project <path>] [-Lang en|de] [-Legacy] [-Copy] [-Uninstall]
+#   .\install.ps1 [-Global] [-Project <path>] [-Tool opencode|claude] [-Lang en|de] [-Legacy] [-Copy] [-Uninstall]
+#   -Tool: opencode (default) or claude. Claude Code gets skills only (agents are OpenCode-format).
 #   -Lang: en (default, .opencode/skills) or de (de/skills). Agents exist in English only.
-#   -Legacy: skills into ~/.config/opencode/skills (project: .opencode/skills) instead of .agents/skills.
+#   -Legacy: OpenCode skills into ~/.config/opencode/skills (project: .opencode/skills) instead of .agents/skills.
 #   -Copy: copy files instead of symlinking; overwrites existing entries.
-# Targets: skills ~/.agents/skills, agents ~/.config/opencode/agents.
+# Targets: OpenCode skills ~/.agents/skills, agents ~/.config/opencode/agents; Claude Code skills ~/.claude/skills.
 param(
   [switch]$Global,
   [string]$Project = "",
+  [ValidateSet("opencode", "claude")][string]$Tool = "opencode",
   [ValidateSet("en", "de")][string]$Lang = "en",
   [switch]$Legacy,
   [switch]$Copy,
@@ -15,13 +17,17 @@ param(
   [switch]$Help
 )
 
-if ($Help) { Get-Content $PSCommandPath | Select-Object -First 7; exit 0 }
+if ($Help) { Get-Content $PSCommandPath | Select-Object -First 8; exit 0 }
 
 $RepoRoot = Split-Path -Parent $PSCommandPath
 $SrcSkills = if ($Lang -eq "de") { Join-Path $RepoRoot "de\skills" } else { Join-Path $RepoRoot ".opencode\skills" }
 $SrcAgents = Join-Path $RepoRoot ".opencode\agents"
+$DstAgents = $null
 
-if ($Project -ne "") {
+if ($Tool -eq "claude") {
+  $claudeDir = if ($Project -ne "") { Join-Path $Project ".claude" } else { Join-Path $HOME ".claude" }
+  $DstSkills = Join-Path $claudeDir "skills"
+} elseif ($Project -ne "") {
   $DstSkills = if ($Legacy) { Join-Path $Project ".opencode\skills" } else { Join-Path $Project ".agents\skills" }
   $DstAgents = Join-Path $Project ".opencode\agents"
 } else {
@@ -64,9 +70,13 @@ function Link-Entry($Src, $Dst) {
   }
 }
 
-if ($Uninstall) { Write-Output "uninstalling from $DstSkills , $DstAgents" }
+if ($Uninstall) { Write-Output "uninstalling from $DstSkills $(if ($DstAgents) { ", $DstAgents" })" }
 
 Get-ChildItem -Directory $SrcSkills | ForEach-Object { Link-Entry $_.FullName (Join-Path $DstSkills $_.Name) }
-Get-ChildItem -File (Join-Path $SrcAgents "*.md") | ForEach-Object { Link-Entry $_.FullName (Join-Path $DstAgents $_.Name) }
+if ($DstAgents) {
+  Get-ChildItem -File (Join-Path $SrcAgents "*.md") | ForEach-Object { Link-Entry $_.FullName (Join-Path $DstAgents $_.Name) }
+} else {
+  Write-Output "skipping agents: they are OpenCode-format, Claude Code would not load them."
+}
 
 Write-Output "done."
