@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Link skills/agents from this repo into OpenCode discovery paths.
 # Usage:
-#   ./install.sh [--global] [--project <path>] [--uninstall]
-# Defaults to --global: ~/.config/opencode/skills|agents
+#   ./install.sh [--global] [--project <path>] [--legacy] [--uninstall]
+#   --legacy: skills into ~/.config/opencode/skills (project: .opencode/skills) instead of .agents/skills.
+# Targets: skills ~/.agents/skills, agents ~/.config/opencode/agents.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -11,23 +12,26 @@ SRC_AGENTS="$REPO_ROOT/.opencode/agents"
 
 MODE="global"
 PROJECT_PATH=""
+LEGACY=0
 UNINSTALL=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --global) MODE="global"; shift ;;
     --project) PROJECT_PATH="${2:?--project needs a path}"; MODE="project"; shift 2 ;;
+    --legacy) LEGACY=1; shift ;;
     --uninstall) UNINSTALL=1; shift ;;
     -h|--help) sed -n '2,6p' "$0"; exit 0 ;;
     *) echo "Unknown arg: $1 (see --help)" >&2; exit 1 ;;
   esac
 done
 
+cfg="${XDG_CONFIG_HOME:-$HOME/.config}/opencode"
 if [[ "$MODE" == "global" ]]; then
-  DST_SKILLS="${XDG_CONFIG_HOME:-$HOME/.config}/opencode/skills"
-  DST_AGENTS="${XDG_CONFIG_HOME:-$HOME/.config}/opencode/agents"
+  if [[ $LEGACY -eq 1 ]]; then DST_SKILLS="$cfg/skills"; else DST_SKILLS="$HOME/.agents/skills"; fi
+  DST_AGENTS="$cfg/agents"
 else
-  DST_SKILLS="$PROJECT_PATH/.opencode/skills"
+  if [[ $LEGACY -eq 1 ]]; then DST_SKILLS="$PROJECT_PATH/.opencode/skills"; else DST_SKILLS="$PROJECT_PATH/.agents/skills"; fi
   DST_AGENTS="$PROJECT_PATH/.opencode/agents"
 fi
 

@@ -1,29 +1,32 @@
 # Link skills/agents from this repo into OpenCode discovery paths.
 # Usage:
-#   .\install.ps1 [-Global] [-Project <path>] [-Copy] [-Uninstall]
+#   .\install.ps1 [-Global] [-Project <path>] [-Legacy] [-Copy] [-Uninstall]
+#   -Legacy: skills into ~/.config/opencode/skills (project: .opencode/skills) instead of .agents/skills.
 #   -Copy: copy files instead of symlinking; overwrites existing entries.
-# Defaults to global: $env:APPDATA\opencode\skills|agents, else ~/.config/opencode on PS7.
+# Targets: skills ~/.agents/skills, agents ~/.config/opencode/agents.
 param(
   [switch]$Global,
   [string]$Project = "",
+  [switch]$Legacy,
   [switch]$Copy,
   [switch]$Uninstall,
   [switch]$Help
 )
 
-if ($Help) { Get-Content $PSCommandPath | Select-Object -First 7; exit 0 }
+if ($Help) { Get-Content $PSCommandPath | Select-Object -First 6; exit 0 }
 
 $RepoRoot = Split-Path -Parent $PSCommandPath
 $SrcSkills = Join-Path $RepoRoot ".opencode\skills"
 $SrcAgents = Join-Path $RepoRoot ".opencode\agents"
 
 if ($Project -ne "") {
-  $DstSkills = Join-Path $Project ".opencode\skills"
+  $DstSkills = if ($Legacy) { Join-Path $Project ".opencode\skills" } else { Join-Path $Project ".agents\skills" }
   $DstAgents = Join-Path $Project ".opencode\agents"
 } else {
-  $base = if ($env:XDG_CONFIG_HOME) { $env:XDG_CONFIG_HOME } elseif ($env:APPDATA) { Join-Path $env:APPDATA "opencode" } else { Join-Path $HOME ".config/opencode" }
-  if ($base -like "*opencode") { $cfg = $base } else { $cfg = Join-Path $base "opencode" }
-  $DstSkills = Join-Path $cfg "skills"
+  $base = if ($env:XDG_CONFIG_HOME) { $env:XDG_CONFIG_HOME } else { Join-Path $HOME ".config" }
+  $cfg = Join-Path $base "opencode"
+  $DstSkills = if ($Legacy) { Join-Path $cfg "skills" } else { Join-Path $HOME ".agents\skills" }
+  # OpenCode reads global agents only from ~/.config/opencode/agents.
   $DstAgents = Join-Path $cfg "agents"
 }
 
