@@ -22,7 +22,7 @@ The map is a single issue on this repo's issue tracker (a `map.md` file under `.
 
 The map is an **index**, not a store. It lists the decisions made and points at the tickets that hold their detail; a decision lives in exactly one place, its ticket, so the map never restates it, only gists it and links.
 
-**Where the map, its child tickets, blocking, and frontier queries physically live is tracker-specific.** Wayfinder works on the local-markdown tracker: the map is `map.md` and tickets are `NN-<slug>.md` files under `.scratch/<feature>/`, with blocking edges as "Blocked by" text in each file. There are no labels locally — the ticket type lives in the ticket body. When the map is fully resolved, hand the destination to `/to-spec`, which publishes the spec to GitHub Issues.
+**Where the map, its child tickets, blocking, and frontier queries physically live is tracker-specific.** Wayfinder works on the local-markdown tracker: the map is `map.md` and tickets are `NN-<slug>.md` files under `.scratch/<feature>/`, with blocking edges as "Blocked by" text in each file. There are no labels locally — the ticket type lives in the ticket body. When the map is fully resolved, hand the destination to `/to-spec`, which publishes the spec to the Issue tracker.
 
 ### The map body
 
