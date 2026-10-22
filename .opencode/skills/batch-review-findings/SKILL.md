@@ -2,6 +2,9 @@
 name: batch-review-findings
 description: Collect open agentic-review issues from GitHub, dedupe their finding cards, and group them into work batches ready to grill into agent-workable issues. Use when the user wants to consolidate agentic-review findings, dedupe review issues, or turn review noise into work blocks.
 disable-model-invocation: true
+metadata:
+  uses: "codebase-design, grill-me"
+  requires: "codebase-design, grill-me"
 ---
 
 # Batch Review Findings

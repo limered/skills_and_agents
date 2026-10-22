@@ -1,6 +1,9 @@
 ---
 name: setup-agents
 description: "Configure installed agents from this collection for a project or globally: pick which agents to keep, fill in their placeholders, prune the rest. Use after install.sh/install.ps1 when agents still carry {{PLACEHOLDERS}}."
+metadata:
+  uses: ""
+  requires: ""
 ---
 
 # Setup agents

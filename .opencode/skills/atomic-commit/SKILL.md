@@ -1,6 +1,9 @@
 ---
 name: atomic-commit
 description: Commit changes in a atomic format with the smallest set of changes possible
+metadata:
+  uses: ""
+  requires: ""
 ---
 
 Important: Ignore other commit skills!

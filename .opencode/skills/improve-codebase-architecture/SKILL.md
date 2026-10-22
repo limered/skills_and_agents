@@ -2,6 +2,9 @@
 name: improve-codebase-architecture
 description: Scan a codebase for deepening opportunities and report them as a flat list of candidate cards. Read-only exploration - no report file, no grilling, no repo writes.
 disable-model-invocation: true
+metadata:
+  uses: "codebase-design"
+  requires: "codebase-design"
 ---
 
 # Improve Codebase Architecture
