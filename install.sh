@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Link skills/agents from this repo into OpenCode or Claude Code discovery paths.
 # Usage:
-#   ./install.sh [--global] [--project <path>] [--tool opencode|claude] [--lang en|de] [--legacy] [--uninstall]
+#   ./install.sh [--global] [--project <path>] [--tool opencode|claude] [--lang en|de] [--skills <name>[,<name>...]] [--legacy] [--uninstall]
 #   --tool: opencode (default) or claude. Claude Code gets skills only (agents are OpenCode-format).
 #   --lang: en (default, .opencode/skills) or de (de/skills). Agents exist in English only.
+#   --skills: only these skills plus the skills they require, no agents. With --uninstall: only the named skills.
 #   --legacy: OpenCode skills into ~/.config/opencode/skills (project: .opencode/skills) instead of .agents/skills.
 # Targets: OpenCode skills ~/.agents/skills, agents ~/.config/opencode/agents; Claude Code skills ~/.claude/skills.
 set -euo pipefail
@@ -15,6 +16,7 @@ MODE="global"
 PROJECT_PATH=""
 TOOL="opencode"
 SKILL_LANG="en"
+SKILLS=""
 LEGACY=0
 UNINSTALL=0
 
@@ -24,9 +26,10 @@ while [[ $# -gt 0 ]]; do
     --project) PROJECT_PATH="${2:?--project needs a path}"; MODE="project"; shift 2 ;;
     --tool) TOOL="${2:?--tool needs opencode|claude}"; shift 2 ;;
     --lang) SKILL_LANG="${2:?--lang needs en|de}"; shift 2 ;;
+    --skill|--skills) SKILLS="${SKILLS:+$SKILLS,}${2:?--skills needs a skill name list}"; shift 2 ;;
     --legacy) LEGACY=1; shift ;;
     --uninstall) UNINSTALL=1; shift ;;
-    -h|--help) sed -n '2,8p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,9p' "$0"; exit 0 ;;
     *) echo "Unknown arg: $1 (see --help)" >&2; exit 1 ;;
   esac
 done
@@ -56,6 +59,29 @@ case "$TOOL" in
   *) echo "Unknown --tool: $TOOL (opencode|claude)" >&2; exit 1 ;;
 esac
 
+# Prints the skills listed in the frontmatter `requires` of skill $1, one per line.
+requires_of() {
+  tr -d '\r' < "$SRC_SKILLS/$1/SKILL.md" \
+    | awk 'NR == 1 && $0 == "---" { fm = 1; next } fm && $0 == "---" { fm = 0 } fm' \
+    | sed -n 's/^[[:space:]]*requires:[[:space:]]*"\(.*\)"[[:space:]]*$/\1/p' \
+    | tr ',' '\n' | sed 's/^ *//; s/ *$//; /^$/d'
+}
+
+SELECTED=""
+if [[ -n "$SKILLS" ]]; then
+  for name in $(tr ',' ' ' <<< "$SKILLS"); do
+    [[ -f "$SRC_SKILLS/$name/SKILL.md" ]] || { echo "Unknown skill: $name" >&2; exit 1; }
+    SELECTED+="$name"$'\n'
+    if [[ $UNINSTALL -eq 0 ]]; then SELECTED+="$(requires_of "$name")"$'\n'; fi
+  done
+  SELECTED="$(sed '/^$/d' <<< "$SELECTED" | sort -u)"
+  for name in $SELECTED; do
+    [[ -d "$SRC_SKILLS/$name" ]] || echo "warning: required skill $name is not in this repo" >&2
+  done
+  echo "skills:" $SELECTED
+  DST_AGENTS=""
+fi
+
 link_entry() {
   local src="$1" dst="$2"
   if [[ $UNINSTALL -eq 1 ]]; then
@@ -78,10 +104,13 @@ if [[ $UNINSTALL -eq 1 ]]; then echo "uninstalling from $DST_SKILLS${DST_AGENTS:
 for d in "$SRC_SKILLS"/*/; do
   [[ -d "$d" ]] || continue
   name="$(basename "$d")"
+  if [[ -n "$SKILLS" ]] && ! grep -qxF "$name" <<< "$SELECTED"; then continue; fi
   link_entry "${d%/}" "$DST_SKILLS/$name"
 done
 
-if [[ -n "$DST_AGENTS" ]]; then
+if [[ -n "$SKILLS" ]]; then
+  echo "skipping agents: --skills selects skills only."
+elif [[ -n "$DST_AGENTS" ]]; then
   for f in "$SRC_AGENTS"/*.md; do
     [[ -f "$f" ]] || continue
     name="$(basename "$f")"
